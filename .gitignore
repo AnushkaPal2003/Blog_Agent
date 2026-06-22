@@ -1,0 +1,63 @@
+# Environment & secrets 
+.env
+*.env
+.env.local
+
+# SQLite database (generated at runtime) 
+*.db
+*.sqlite
+*.sqlite3
+
+# Generated blog outputs 
+*.md
+!README.md
+
+# Generated images folder 
+images/
+
+#  Python 
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+wheels/
+*.spec
+
+# Virtual environment 
+venv/
+env/
+.venv/
+.env/
+ENV/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Jupyter 
+.ipynb_checkpoints/
+*.ipynb
+
+# Logs 
+*.log
+logs/
+
+# Streamlit cache 
+.streamlit/
+
+# Images
+*.jpg
+*.png
