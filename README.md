@@ -89,5 +89,4 @@ streamlit run app.py
 - **Reducer subgraph** — separate subgraph for merge/image pipeline
 - **Conditional routing** — router decides research mode before any LLM planning
 - **Structured outputs** — Pydantic models for every LLM response
-- **Provider fallback chain** — HuggingFace FLUX → Pollinations.ai for resilient image generation
 - **Graceful fallbacks** — image failures don't break the blog
