@@ -18,7 +18,7 @@ User Input (topic)
   [Reducer Subgraph]
     ├── merge_content    → joins all sections + sources
     ├── decide_images    → plans image placements (max 3)
-    └── generate_and_place_images → Gemini AI images
+    └── generate_and_place_images → HuggingFace FLUX / Pollinations fallback
       ↓
   Final Blog (Markdown + images saved locally)
 ```
@@ -28,10 +28,10 @@ User Input (topic)
 - **Multi-agent parallel writing** — sections written concurrently via LangGraph `Send` API
 - **Smart routing** — decides whether web research is needed before planning
 - **Clickable sources** — all citations rendered as inline Markdown links
-- **AI image generation** — Gemini 2.5 Flash generates diagrams automatically
-- **SQLite persistence** — every run saved, history accessible
+- **AI image generation** — HuggingFace FLUX.1-dev with Pollinations.ai as automatic fallback
+- **In-memory state** — full graph state managed across nodes
 - **LangSmith tracing** — full observability of every node and LLM call
-- **Groq support** — switch to free Groq LLM for dev/testing
+- **Graceful fallbacks** — image failures never break the blog output
 
 ## 📁 Project Structure
 
@@ -40,7 +40,7 @@ blog_writer_agent/
 ├── app.py              # Streamlit UI
 ├── graph.py            # LangGraph graph definition
 ├── schemas.py          # All Pydantic models + State
-├── llm.py              # LLM instance (OpenAI / Groq toggle)
+├── llm.py              # LLM instance (OpenAI)
 ├── nodes/
 │   ├── router.py       # Routing node + route_next
 │   ├── research.py     # Tavily research node
@@ -76,17 +76,18 @@ streamlit run app.py
 
 | Key | Purpose | Free tier? |
 |-----|---------|-----------|
-| `OPENAI_API_KEY` | LLM (or use Groq) | No |
-| `GROQ_API_KEY` | Free LLM alternative | ✅ Yes |
+| `OPENAI_API_KEY` | LLM for all text generation | No |
 | `TAVILY_API_KEY` | Web research | ✅ Yes (1000 searches/mo) |
-| `GOOGLE_API_KEY` | Gemini image generation | Limited free |
+| `HF_TOKEN` | HuggingFace FLUX image generation | ✅ Yes |
 | `LANGCHAIN_API_KEY` | LangSmith tracing | ✅ Yes |
+
+> **Note:** `HF_TOKEN` is optional. If not set, image generation automatically falls back to Pollinations.ai — completely free, no signup required.
 
 ## 💡 Interview Talking Points
 
 - **Fanout pattern** (`Send` API) — parallel section writing, not sequential
 - **Reducer subgraph** — separate subgraph for merge/image pipeline
 - **Conditional routing** — router decides research mode before any LLM planning
-- **SQLite checkpointer** — persistence across sessions
 - **Structured outputs** — Pydantic models for every LLM response
+- **Provider fallback chain** — HuggingFace FLUX → Pollinations.ai for resilient image generation
 - **Graceful fallbacks** — image failures don't break the blog
